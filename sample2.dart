@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 /**
- * ここで右上で日付を選択すると、カレンダーの表示が選択した日付に変更されます。
+ * 日付で日付を選択すると、カレンダーの表示が選択した日付に変更されます。
+ * 週ごと
  */
 void main() {
   runApp(const MyApp());
@@ -60,21 +61,24 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme
-            .of(context)
-            .colorScheme
-            .inversePrimary,
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.calendar_today),
-            onPressed: () => _selectDate(context),
-          ),
-        ],
       ),
       body: SfCalendar(
-        view: CalendarView.day,
+        view: CalendarView.week,
         controller: _calendarController,
+        onTap: (CalendarTapDetails details) {
+          if (details.targetElement == CalendarElement.header) {
+            _selectDate(context);
+          }
+          // else if (details.targetElement == CalendarElement.viewHeader ||
+          //     details.targetElement == CalendarElement.calendarCell) {
+          //   setState(() {
+          //     _calendarController.view = CalendarView.day;
+          //     _calendarController.displayDate = details.date;
+          //   });
+          // }
+        },
         dataSource: MeetingDataSource(_getDataSource()),
         monthViewSettings: const MonthViewSettings(
           appointmentDisplayMode: MonthAppointmentDisplayMode.appointment,
